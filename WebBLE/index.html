@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Web BLE Argon Setup Example</title>
+        <title>Particle Web BLE WiFi Setup Example</title>
         <style>
         div, h1, h2, h3 {
             font-family: Helvetica, Arial, sans-serif, serif;
@@ -11,10 +11,10 @@
         </style>
     </head>
     <body>
-        <h2>Argon BLE WiFi Configuration</h2>
+        <h2>BLE WiFi Configuration</h2>
 
         <form id="form_connect">
-            <input id="connect_btn" type="submit" value="Connect to Argon">
+            <input id="connect_btn" type="submit" value="Connect to Device">
         </form>
 
         <form id="form_wifi_scan" style="display: none; margin-top: 10px;">
@@ -48,7 +48,7 @@
             },
         };
 
-        var argon_ble_device = null;    // BLE connection instance
+        var particle_device = null;    // BLE connection instance
         var ssids = [];
 
         const uuid_wifi_config_service = 'b4ad5b8d-d2db-44d6-9d35-5d43b9e5060c';
@@ -58,9 +58,9 @@
         var encoder = new TextEncoder();
 
         function onScanButtonClick() {
-            if (argon_ble_device) {
+            if (particle_device) {
                 // Set up notifications for responses on the RX channel
-                argon_ble_device.gatt.getPrimaryService(uuid_wifi_config_service)
+                particle_device.gatt.getPrimaryService(uuid_wifi_config_service)
                 .then(service => {
                     service.getCharacteristic(uuid_wifi_config_rx)
                     .then(characteristic => {
@@ -93,13 +93,13 @@
                     Logger.log('Argh! ' + error);
                 })
             } else {
-                Logger.log('Not connected to Argon!');
+                Logger.log('Not connected to Device!');
             }
         }
 
         function onSubmitCredentialsButtonClick() {
-            if (argon_ble_device) {
-                argon_ble_device.gatt.getPrimaryService(uuid_wifi_config_service)
+            if (particle_device) {
+                particle_device.gatt.getPrimaryService(uuid_wifi_config_service)
                 .then(service => {
                     return service.getCharacteristic(uuid_wifi_config_tx)
                 })
@@ -120,7 +120,7 @@
                     Logger.log('Argh! ' + error);
                 })
             } else {
-            Logger.log('Not connected to Argon!');
+            Logger.log('Not connected to Device!');
             }
         }
 
@@ -135,7 +135,7 @@
                 // Connect to the selected device
                 Logger.log('Connecting to ' + device.name + '...');
                 device.addEventListener('gattserverdisconnected', onDisconnected);
-                argon_ble_device = device;
+                particle_device = device;
                 return device.gatt.connect();
             })
             .then(server => {
@@ -144,18 +144,18 @@
                 document.getElementById('form_wifi_scan').style.display = "block";
                 document.getElementById('form_wifi_config').style.display = "block";
                 document.getElementById('wifi_scan_btn').disabled = false;
-                document.getElementById('connect_btn').value = "Disconnect from Argon";
+                document.getElementById('connect_btn').value = "Disconnect from Device";
             })
             .catch(error => {
                 Logger.log('Argh! ' + error);
-                argon_ble_device = null;
+                particle_device = null;
             });
         }
 
         function onDisconnectButtonClick() {
-            if (argon_ble_device) {
+            if (particle_device) {
                 Logger.log('Disconnecting...');
-                argon_ble_device.gatt.disconnect();
+                particle_device.gatt.disconnect();
             }
         }
 
@@ -174,7 +174,7 @@
                             ssid_list.appendChild(new Option(ssid_string, obj.ssid));
                             ssids.push(obj);
 
-                            // Hacky fix to only enable SSID and Password fields after we get an SSID response from the Argon
+                            // Hacky fix to only enable SSID and Password fields after we get an SSID response from the Device
                             if (ssids.length == 1) {  // Added our first SSID to the list
                                 // Enable SSID and Password fields on the web form
                                 document.getElementById('ssid').disabled = false;
@@ -194,7 +194,7 @@
         function onDisconnected(event) {
             const device = event.target;
             Logger.log(`Device ${device.name} is disconnected.`);
-            argon_ble_device = null;
+            particle_device = null;
             resetUI();
         }
 
@@ -227,7 +227,7 @@
             event.preventDefault();
 
             if (navigator.bluetooth) {
-                if (argon_ble_device) {
+                if (particle_device) {
                     // Disconnect
                     onDisconnectButtonClick();
                 } else {
