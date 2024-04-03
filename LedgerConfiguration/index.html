@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurable Table</title>
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Particle API requirements -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/particle-api-js@10/dist/particle.min.js"></script>
+</head>
+<body>    
+    <div class="content-container">
+        <div class="apiHelperBox">
+            <h2>Particle Login</h2>
+            <div class="apiHelperLoggedIn apiHelperSmallText apiHelperManualOption" style="display:none">
+                <p>Logged into Particle as <span class="apiHelperUser"></span> &nbsp;
+                    <button class="apiHelperLogoutButton">Logout</button>
+                </p>
+                <p style="display:none" class="apiHelperSsoSelectOrg">
+                    Organization: <select class="apiHelperSelect"></select>
+                </p><br>        </div>
+            <div class="apiHelperCouldSSO apiHelperSmallText apiHelperManualOption" style="display:none">
+                <p>Log in to your Particle account</p>
+                <p><button class="apiHelperLoginButton">Login</button></p>
+            </div>
+            <div class="apiHelperManualLoginDiv" style="display:none">
+                    <p><button class="apiHelperManualLoginButton">Manual login (not using single sign-on)</button></p>
+            </div>
+            <div class="apiHelperLocalLogIn" style="">
+                <div class="apiHelperLocalLoginPageLogin">
+                    <p>Log in manually (not using single sign-on)</p>
+                    <br><table class="apiHelperTableNoMargin">
+                        <tbody>
+                            <tr class="apiHelperLocalLoginLogInUsingRow">
+                                <td class="apiHelperProductSelectorLabel">Log in using:</td>
+                                <td><label><input name="logInUsingRadio" value="userPass" type="radio" checked="">Username and Password</label> &nbsp;&nbsp;<label><input name="logInUsingRadio" value="token" type="radio">Access token</label></td>
+                            </tr>
+                            <tr class="apiHelperLocalLoginUsernameRow">
+                                <td class="apiHelperProductSelectorLabel">Username (Email):</td>
+                                <td><input class="apiHelperLocalLoginUsernameInput" type="text"></td>
+                            </tr>
+                            <tr class="apiHelperLocalLoginUsernameRow">
+                                <td class="apiHelperProductSelectorLabel">Password:</td>
+                                <td><input class="apiHelperLocalLoginPasswordInput" type="password"></td>
+                            </tr>
+                            <tr class="apiHelperLocalLoginUsernameRow">
+                                <td class="apiHelperProductSelectorLabel">Maximum time to stay logged in:</td>
+                                <td><select class="apiHelperLocalLoginTokenDuration apiHelperSelect">
+                                        <option value="3600" selected="">1 Hour</option>
+                                        <option value="14400">4 Hours</option>
+                                        <option value="28000">8 Hours</option>
+                                        <option value="86400">1 Day</option>
+                                        <option value="604800">7 Days</option>
+                                        <option value="2592000">30 Days</option>
+                                        <option value="7776000">90 Days</option>
+                                    </select></td>
+                            </tr>
+                            <tr class="apiHelperLocalLoginAccessTokenRow" style="display: none;">
+                                <td class="apiHelperProductSelectorLabel">Access token:</td>
+                                <td><input class="apiHelperLocalLoginAccessTokenInput" type="text" size="50" value=""></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="buttons-container" style="display: flex;">
+                        <button class="apiHelperButton apiHelperLocalLoginLoginButton">Login</button>
+                    </div>
+                </div>
+                <div class="apiHelperLocalLoginPageOTP" style="display:none">
+                    <br><table class="apiHelperTableNoMargin">
+                        <tbody>
+                            <tr class="otpRow">
+                                <td class="apiHelperProductSelectorLabel">MFA OTP Token:</td>
+                                <td><input class="apiHelperLocalLoginOtpInput" type="text" size="10"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="buttons-container" style="display: flex;">
+                        <button class="apiHelperButton apiHelperLocalLoginContinueLoginButton">Continue Login</button>
+                    </div>
+                    <br>            </div>
+                <div class="apiHelperLocalLoginPageLoginFailed" style="display:none">
+                    <p>Login failed. Try again.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="apiHelper apiHelperBox apiHelperLedger" style="padding-bottom: 20px">
+            <h2>Ledger Configuration</h2>
+            <table class="apiHelperLedgerSelectorTable">
+                <tbody>
+                    <tr class="apiHelperTrackerOrgRow" style="display:none">
+                        <td class="apiHelperProductSelectorLabel">Organization</td>
+                        <td><select class="apiHelperTrackerOrgSelect apiHelperSelect"></select></td>
+                    </tr>
+                    <tr class="apiHelperLedgerRow">
+                        <td class="apiHelperLedgerSelectorLabel">Ledger</td>
+                        <td><select class="apiHelperLedgerSelect apiHelperSelect"></select></td>
+                    </tr>
+                    <tr class="apiHelperLedgerInstanceRow">
+                        <td class="apiHelperLedgerInstanceSelectorLabel">Ledger Instance</td>
+                        <td><select class="apiHelperLedgerInstanceSelect apiHelperSelect"></select></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="buttons-container" style="display: flex;">
+                <button type="button" id="loadLedgerConfigButton" class="apiHelperButton">⬇️ Load Config</button>
+                <button type="button" id="pushLedgerConfigButton" class="apiHelperButton">⬆️ Push Config</button>
+            </div>
+        </div>
+        
+
+        <div class="apiHelper apiHelperBox apiHelperRS485Config" id="modbusRS485Config" style="margin-bottom: 20px;">
+            <h2>Modbus RS-485 Configuration</h2>
+            <form id="rs485ConfigForm">
+                <div class="config-row">
+                    <label for="baud">RS-485 Baud:</label>
+                    <select id="baud">
+                        <option value="1200">1200</option>
+                        <option value="2400">2400</option>
+                        <option value="4800">4800</option>
+                        <option value="9600" selected>9600</option>
+                        <option value="19200">19200</option>
+                        <option value="28800">28800</option>
+                        <option value="38400">38400</option>
+                        <option value="57600">57600</option>
+                        <option value="76800">76800</option>
+                        <option value="115200">115200</option>
+                    </select>
+                </div>
+                
+                <div class="config-row">
+                    <label for="parity">RS-485 Parity Bits:</label>
+                    <select id="parity">
+                        <option value="none" selected>None</option>
+                        <option value="even">Even</option>
+                    </select>
+                </div>
+                
+                <div class="config-row">
+                    <label for="imd">Modbus Inter-Message Delay (ms):</label>
+                    <input type="number" id="imd" title="Delay between the last Modbus response and the next transmission in milliseconds.  This is used for rate limiting transactions." min="0" max="10000" step="1" value="0">
+                </div>
+                
+            </form>
+        </div>
+        
+        <div class="apiHelper apiHelperBox apiHelperModbusConfig" id="modbusConfig" style="margin-bottom: 20px;">
+            <h2>Monitoring Configuration</h2>
+            <table id="configTable">
+                <thead>
+                    <tr>
+                        <th>Enable</th>
+                        <th>Client ID</th>
+                        <th>Timeout (ms)</th>
+                        <th>Polling Interval (s)</th>
+                        <th>Publish</th>
+                        <th>Read Type</th>
+                        <th>Read Address</th>
+                        <th>Data Type</th>
+                        <th>Data Mask</th>
+                        <th>Shift</th>
+                        <th>Offset</th>
+                        <th>Scale</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows will be added here dynamically -->
+                </tbody>
+            </table>
+            <button id="addRowBtn">➕ Add Row</button>
+            <button id="exportJsonBtn">Export JSON</button>
+        </div>
+    </div>
+
+    <div id="jsonModal" style="display:none;">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span id="closeModalButton" class="close-btn">&times;</span>
+            <textarea id="jsonOutput"></textarea>
+            <button id="downloadJsonButton">Download JSON</button>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+    
+    <script src="script.js"></script>
+    <script src="api-helper.js"></script>
+    <script src="api-helper-auth.js"></script>
+    <script src="api-helper-ledger.js"></script>
+    <script src="api-helper-config.js"></script>
+</body>
+</html>

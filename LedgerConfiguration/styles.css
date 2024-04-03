@@ -1,0 +1,237 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.content-container {
+    width: 80%; /* or any specific width you prefer */
+    max-width: 1200px; /* Maximum width to ensure content is not too stretched on wider screens */
+    margin: 0 auto; /* Center the div */
+    padding: 20px; /* Add some padding around the content */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Optional: adds a subtle shadow for depth */
+    background-color: #ffffff; /* Optional: set a background color */
+    border-radius: 8px; /* Optional: rounds the corners */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+th {
+    background-color: #f2f2f2;
+}
+button {
+    margin-top: 10px;
+}
+
+/* Additional style adjustments for visual coherence */
+#modbusRS485Config, #configTable {
+    margin-bottom: 20px; /* Adds some spacing between sections */
+}
+
+#modbusRS485Config select, #modbusRS485Config input {
+    margin-top: 5px;
+}
+
+#modbusRS485Config label, #configTable th, #configTable td {
+    text-align: left; /* Align text to the left for readability */
+}
+
+#apiHelperBox {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: max-content auto;
+    gap: 20px; /* Adjust space between labels and fields */
+    align-items: center;
+}
+
+#rs485ConfigForm {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 8px;
+    display: grid;
+    grid-template-columns: max-content auto;
+    gap: 20px; /* Adjust space between labels and fields */
+    align-items: center;
+}
+
+#rs485ConfigForm .config-row {
+    display: contents; /* This makes .config-row act as if it's not there, allowing its children to directly participate in the grid */
+}
+
+#rs485ConfigForm label, #rs485ConfigForm select, #rs485ConfigForm input {
+    display: block; /* Makes sure each element takes up the full space allotted to it */
+}
+
+#rs485ConfigForm select, #rs485ConfigForm input {
+    width: 100%; /* Ensures inputs and selects fill their grid area */
+}
+
+#addRowBtn {
+    display: block; /* Make the Add Row button a block element */
+    width: 100%; /* Allow it to take the full width of its container */
+    padding: 10px; /* Add some padding for better clickability */
+    margin-bottom: 20px; /* Space at the bottom */
+    cursor: pointer; /* Indicates the button is clickable */
+    font-size: 16px; /* Larger font size */
+}
+
+#configTable td.checkbox-cell {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+
+#configTable td.actionsCell > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%; /* Fill the cell */
+    height: 100%; /* Fill the cell */
+}
+
+#configTable td {
+    border: 1px solid #ccc; /* Ensure consistent borders */
+}
+
+#configTable input[type="text"],
+#configTable input[type="number"] {
+    width: 100%; /* Makes input take the full width of its parent cell */
+    box-sizing: border-box; /* Includes padding and border in the element's total width */
+}
+
+#configTable input {
+    max-width: 100%; /* Ensures input does not exceed cell width */
+}
+
+#configTable td span[role="button"] {
+    cursor: pointer;
+    margin-right: 3px; /* Adjust spacing between icons */
+    margin-left: 3px;
+    display: inline-flex; /* Use flexbox for center alignment and to keep icons in line */
+    align-items: center;
+    justify-content: center;
+}
+
+#configTable td span[role="button"]:hover {
+    opacity: 0.7; /* Visual feedback on hover */
+}    
+
+#configTable span img {
+    width: 20px;
+    height: 20px;
+}
+
+/* Modal */
+/* The Modal (background) */
+#jsonModal {
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 40%; /* Could be more or less, depending on screen size */
+    height: 60%;
+    border-radius: 8px; /* Optional: rounds the corners */
+}
+
+.modal-content textarea {
+    width: 100%; 
+    height: 80%;
+}
+
+/* The Close Button */
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Toast */
+.toast {
+    visibility: hidden; /* Hidden by default */
+    min-width: 250px; /* Set a default minimum width */
+    background-color: #333; /* Black background color */
+    color: #fff; /* White text color */
+    text-align: center; /* Centered text */
+    border-radius: 2px; /* Rounded borders */
+    padding: 16px; /* Padding */
+    position: fixed; /* Sit on top of the screen */
+    z-index: 1; /* Add a z-index if needed */
+    left: 50%; /* Center the toast horizontally */
+    bottom: 30px; /* Position from the bottom */
+    font-size: 14px; /* Text size */
+    transform: translateX(-50%); /* Adjust horizontally to truly center based on its width */
+}
+
+
+/* Show the toast when visibility is set to visible */
+.toast.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the toast in and out */
+@-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;} 
+    to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;} 
+    to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}
+
+/* Ledger buttons */
+.apiHelperButton {
+    flex: 1; /* Makes each button take up equal width */
+    margin: 5px; /* Adds a little space between the buttons */
+    padding: 10px 0; /* More vertical padding for a taller button */
+    cursor: pointer; /* Changes the mouse cursor to a pointer on hover */
+    font-size: 16px; /* Larger font size */
+}
+
+.buttons-container {
+    display: flex; /* Use Flexbox for layout */
+    justify-content: space-between; /* Space out buttons equally */
+    padding-top: 10px; /* Space above the buttons */
+}
